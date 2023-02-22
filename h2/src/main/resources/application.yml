@@ -1,0 +1,25 @@
+server:
+  port: 8081
+spring:
+  datasource:
+    url: jdbc:h2:mem:test; # INIT=RUNSCRIPT FROM 'classpath:/db/H2.sql'
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    database: H2
+    show-sql: true
+    hibernate:
+      ddl-auto: none # 当使用嵌入式数据库且没有检测到 schema 管理器时，默认是 "create-drop" 模式，其他默认是 none
+                     # 如果用的 sql.init.schema-locations 和 data-locations 去初始化数据库，就没有上面所说的有 schema 管理器，
+                     # 所以这里必须设置为 none，否则当 sql.init 执行完成后，它的 "create-drop" 将会把表干掉重建，数据就丢失了
+                     # 如果是在 jdbc:h2:mem:test; 后面加了 INIT=RUNSCRIPT FROM 'classpath:/db/H2.sql'，则这里可以忽略，
+                     # 虽然还是 "create-drop"，但好在 runscript 晚执行，数据是后续才添加进来了
+  h2:
+    console:
+      enabled: true # 开启控制台，访问路径格式如：http://localhost:8081/h2-console
+  sql:
+    init:
+      mode: embedded
+      schema-locations: classpath:/db/schema.sql
+      data-locations: classpath:/db/data.sql
